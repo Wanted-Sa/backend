@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "wanted-pre-onboarding-backend"
+version = "0.1.0"
+description = ""
+authors = ["saJH <wogur981208@naver.com>"]
+readme = "README.md"
+packages = [{include = "wanted_pre_onboarding_backend"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^4.2.4"
+djangorestframework = "^3.14.0"
+djangorestframework-simplejwt = "^5.2.2"
+pymysql = "^1.1.0"
+drf-yasg = "^1.21.7"
+django-cors-headers = "^4.2.0"
+pillow = "^10.0.0"
+pydantic = "^2.1.1"
+django-environ = "^0.10.0"
+gunicorn = "^21.2.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
