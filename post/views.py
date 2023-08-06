@@ -1,8 +1,6 @@
-
-from django.http import JsonResponse
-
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated
 
@@ -33,4 +31,4 @@ class PostListAPI(APIView):
         context = {
             'post': PostListSerializer(post).data,
         }
-        return JsonResponse(data=context, status=status.HTTP_201_CREATED)
+        return Response(data=context, status=status.HTTP_201_CREATED)

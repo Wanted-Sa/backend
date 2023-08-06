@@ -1,8 +1,6 @@
-
-from django.http import JsonResponse
-
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenViewBase
@@ -37,7 +35,7 @@ class SignUpAPI(APIView):
         context = {
             'account': SignUpSerializer(account).data,
         }
-        return JsonResponse(data=context, status=status.HTTP_201_CREATED)
+        return Response(data=context, status=status.HTTP_201_CREATED)
 
 
 class SignInAPI(TokenViewBase):
@@ -61,5 +59,5 @@ class SignInAPI(TokenViewBase):
             'access_token': serializer.validated_data['access'],
             'refresh_token': serializer.validated_data['refresh'],
         }
-        return JsonResponse(data=context, status=status.HTTP_200_OK)
+        return Response(data=context, status=status.HTTP_200_OK)
         
