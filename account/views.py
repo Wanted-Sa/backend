@@ -4,24 +4,22 @@ from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.exceptions import APIException
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenViewBase
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 
-from account.services import (
-    AccountService
-)
-from account.validators import (
-    AccountValidator
-)
-from account.serializers import (
-    SignUpSerializer
-)
+from account.services import AccountService
+
+from account.validators import AccountValidator
+
+from account.serializers import SignUpSerializer
+
 from config.common.decorator import (
     required_data,
     optional_data,
 )
+from config.common.exceptions import ValidationException
+
 
 class SignUpAPI(APIView):
     
@@ -31,7 +29,7 @@ class SignUpAPI(APIView):
             account = AccountService.create_account(rd['email'], rd['password'])
         
         except ValueError as e:
-            raise APIException(e.errors()[0]['msg'])
+            raise ValidationException(e.errors()[0]['msg'])
         
         except Exception as e:
             raise APIException(e)
@@ -53,7 +51,7 @@ class SignInAPI(TokenViewBase):
             serializer.is_valid(raise_exception=True)
         
         except ValueError as e:
-            raise APIException(e.errors()[0]['msg'])
+            raise ValidationException(e.errors()[0]['msg'])
         
         except TokenError as e:
             raise InvalidToken(e.args[0])
