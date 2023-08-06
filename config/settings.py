@@ -14,7 +14,10 @@ SECRET_KEY = env("SECRET_KEY")
 
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = ['backend-api']
+ALLOWED_HOSTS = [
+    'backend-api', 
+    '127.0.0.1',
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -27,7 +30,6 @@ INSTALLED_APPS = [
     # Third party
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
-    'drf_yasg',
     'corsheaders',
     
     # Internal apps
@@ -49,14 +51,7 @@ MIDDLEWARE = [
 # Rest Framework
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-    'rest_framework_simplejwt.authentication.JWTAuthentication']
-}
-
-# Swagger
-SWAGGER_SETTINGS = {
-    "SECURITY_DEFINITIONS": {
-        "Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}
-    }
+    'rest_framework_simplejwt.authentication.JWTAuthentication'],
 }
 
 ROOT_URLCONF = "config.root_urls"
