@@ -5,7 +5,7 @@ from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated
 
 from post.services import PostService
-from post.serializers import PostListSerializer
+from post.serializers import PostSerializer
 from post.selectors import PostSelector
 
 from config.common.decorator import (
@@ -13,7 +13,7 @@ from config.common.decorator import (
     optional_data,
 )
 from config.common.pagination import PaginationHandlerMixin, BasePagination
-from config.common.exceptions import ValidationException
+from config.common.exceptions import NotFoundException
 
 
 class PostListAPI(PaginationHandlerMixin, APIView):
@@ -29,7 +29,7 @@ class PostListAPI(PaginationHandlerMixin, APIView):
             raise APIException(e)
         
         context = {
-            'post': PostListSerializer(post).data,
+            'post': PostSerializer(post).data,
         }
         return Response(data=context, status=status.HTTP_201_CREATED)
     
@@ -41,7 +41,7 @@ class PostListAPI(PaginationHandlerMixin, APIView):
         except Exception as e:
             raise APIException(e)
         
-        post_serializer = self.get_paginated_response(PostListSerializer(post_page, many=True).data)
+        post_serializer = self.get_paginated_response(PostSerializer(post_page, many=True).data)
         
         context = {
             'post': post_serializer.data
@@ -49,7 +49,29 @@ class PostListAPI(PaginationHandlerMixin, APIView):
         return Response(data=context, status=status.HTTP_200_OK)
 
 
-# class PostDetailAPI(APIView):
-#     permission_classes = [Is]
+class PostDetailAPI(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request,post_id):
+        try:
+             post = PostSelector.get_post_by_id(post_id)
+        
+        except NotFoundException as e:
+            raise NotFoundException(e)
+        
+        except Exception as e:
+            raise APIException(e)
+        
+        context = {
+            'post': PostSerializer(post).data,
+        }
+        return Response(data=context, status=status.HTTP_200_OK)
+    
+    @required_data('title', 'content')
+    def put(self, request, post_id, rd):
+        pass
+    
+    def delete(self, request, post_id):
+        pass
     
     
