@@ -73,8 +73,8 @@ poetry run python manage.py runserver
 |회원가입| POST| /api/v1/account/signup|email, password|id, email, create_at, updated_at
 |로그인(access)| POST| /api/v1/account/signup|email, password|access_token, refresh_token
 |로그인(refresh)| POST| /api/v1/account/token|refresh_token|access_token
-|게시글 생성| POST| api/v1/post |title, content | id, title, content, create_at, updated_at, account_id
-|게시글 리스트 조회 | GET| api/v1/post?page||id, title, content, create_at, updated_at, account_id
+|게시글 생성| POST| api/v1/post/ |title, content | id, title, content, create_at, updated_at, account_id
+|게시글 리스트 조회 | GET| api/v1/post/?page||id, title, content, create_at, updated_at, account_id
 |게시글 상세 조회| GET| api/v1/post/<int:post_id >|| id, title, content, create_at, updated_at, account_id
 |특정 게시글 수정|PUT| api/v1/post/<int:post_id >|title, content|id, title, content, create_at, updated_at, account_id
 |특정 게시글 삭제|DELETE| api/v1/post/<int:post_id >/||
