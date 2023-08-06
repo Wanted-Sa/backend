@@ -11,7 +11,7 @@ from config.common.exceptions import NotFoundException
 class AbstractPostSelector(ABC):
     @abstractmethod
     def get_post_all(self) -> QuerySet[Post]:
-        pass
+        pass    
     
     @abstractmethod
     def get_post_by_id(self, post_id: int) -> QuerySet[Post]:

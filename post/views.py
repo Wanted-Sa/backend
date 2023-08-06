@@ -35,7 +35,7 @@ class PostListAPI(PaginationHandlerMixin, APIView):
     
     def get(self, request):
         try:
-            post = PostSelector.get_post_all()
+            post = PostSelector.get_post_all().order_by('-created_at')
             post_page = self.paginate_queryset(post)
             
         except Exception as e:

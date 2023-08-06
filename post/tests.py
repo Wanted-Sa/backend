@@ -70,3 +70,36 @@ class PostListAPITest(APITestCase):
             path=reverse("post_list_view"),
         )
         self.assertEqual(response.status_code, 401)
+        
+        
+class PostDetailAPITest(APITestCase):
+    @classmethod
+    def setUpTestData(self):
+        self.user_data = {"email": "test@test.com", "password": "test1234!"}
+        self.user = Account.objects.create_user("test@test.com", "test1234!")
+    
+    def setUp(self):
+        self.access_token = self.client.post(reverse("signin_view"), self.user_data).data["access_token"]
+    
+    def test_post_detail_success(self):
+        post = Post.objects.create(title="test", content="test", account=self.user)
+        response = self.client.get(
+            path=reverse("post_detail_view", kwargs={"post_id": post.id}),
+            HTTP_AUTHORIZATION=f"Bearer {self.access_token}",
+        )
+        self.assertEqual(response.status_code, 200)
+        
+    def test_post_detail_anonymous_fail(self):
+        post = Post.objects.create(title="test", content="test", account=self.user)
+        response = self.client.get(
+            path=reverse("post_detail_view", kwargs={"post_id": post.id}),
+        )
+        self.assertEqual(response.status_code, 401)
+        
+    def test_post_detail_not_found_fail(self):
+        response = self.client.get(
+            path=reverse("post_detail_view", kwargs={"post_id": 1}),
+            HTTP_AUTHORIZATION=f"Bearer {self.access_token}",
+        )
+        self.assertEqual(response.status_code, 404)
+    
