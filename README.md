@@ -34,8 +34,8 @@ Djnago 실행
 poetry run python manage.py runserver
 ```
 - 엔드포인트 호출 시 (로컬/원격)
-- http://127.0.0.1:8000로 API 호출 보내기(로컬)
-- http://www.django-wanted-task.shop로 API 호출 보내기(원격)
+- http://127.0.0.1:8000로 API 호출 보내기(로컬)h
+- http://43.202.87.58로 API 호출 보내기(원격)
 ## 데이터베이스 테이블 구조
 ![ERD](./static/ERD.png)
 
