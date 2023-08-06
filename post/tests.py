@@ -45,3 +45,28 @@ class PostCreateAPITest(APITestCase):
             data={"title": "test"},
         )
         self.assertEqual(response.status_code, 400)
+
+
+class PostListAPITest(APITestCase):
+    @classmethod
+    def setUpTestData(self):
+        self.user_data = {"email": "test@test.com", "password": "test1234!"}
+        self.user = Account.objects.create_user("test@test.com", "test1234!")
+        for _ in range(10):
+            Post.objects.create(title="test", content="test", account=self.user)
+    
+    def setUp(self):
+        self.access_token = self.client.post(reverse("signin_view"), self.user_data).data["access_token"]
+        
+    def test_post_list_success(self):
+        response = self.client.get(
+            path=reverse("post_list_view"),
+            HTTP_AUTHORIZATION=f"Bearer {self.access_token}",
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_post_list_anonymous_fail(self):
+        response = self.client.get(
+            path=reverse("post_list_view"),
+        )
+        self.assertEqual(response.status_code, 401)
