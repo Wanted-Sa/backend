@@ -4,14 +4,13 @@ from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.exceptions import APIException
+from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenViewBase
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 
 from account.services import AccountService
-
 from account.validators import AccountValidator
-
 from account.serializers import SignUpSerializer
 
 from config.common.decorator import (
@@ -22,6 +21,7 @@ from config.common.exceptions import ValidationException
 
 
 class SignUpAPI(APIView):
+    permission_classes = [AllowAny]
     
     @required_data('email', 'password')
     def post(self, request, rd):
@@ -41,6 +41,7 @@ class SignUpAPI(APIView):
 
 
 class SignInAPI(TokenViewBase):
+    permission_classes = [AllowAny]
     _serializer_class = api_settings.TOKEN_OBTAIN_SERIALIZER
     
     @required_data('email', 'password')

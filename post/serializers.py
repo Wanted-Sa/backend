@@ -1,15 +1,17 @@
 from rest_framework.serializers import ModelSerializer
 
-from account.models import Account
+from post.models import Post
 
 
-class SignUpSerializer(ModelSerializer):
+class PostListSerializer(ModelSerializer):
     
     class Meta:
-        model = Account
+        model = Post
         fields = (
             'id',
-            'email',
+            'title',
+            'content',
             'created_at',
             'updated_at',
+            'account_id',
         )
