@@ -12,11 +12,13 @@ from config.common.decorator import (
     required_data,
     optional_data,
 )
+from config.common.pagination import PaginationHandlerMixin, BasePagination
 from config.common.exceptions import ValidationException
 
 
-class PostListAPI(APIView):
+class PostListAPI(PaginationHandlerMixin, APIView):
     permission_classes = [IsAuthenticated]
+    pagination_class = BasePagination
     
     @required_data('title', 'content')
     def post(self, request, rd):
@@ -34,12 +36,20 @@ class PostListAPI(APIView):
     def get(self, request):
         try:
             post = PostSelector.get_post_all()
+            post_page = self.paginate_queryset(post)
             
         except Exception as e:
             raise APIException(e)
         
+        post_serializer = self.get_paginated_response(PostListSerializer(post_page, many=True).data)
+        
         context = {
-            'post': PostListSerializer(post, many=True).data,
+            'post': post_serializer.data
         }
         return Response(data=context, status=status.HTTP_200_OK)
-        
+
+
+# class PostDetailAPI(APIView):
+#     permission_classes = [Is]
+    
+    
