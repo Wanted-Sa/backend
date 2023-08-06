@@ -23,3 +23,9 @@ class NotFoundException(APIException):
     status_code = 404
     default_detail = 'Not found.'
     default_code = 'NotFound'
+    
+
+class ForbiddenException(APIException):
+    status_code = 403
+    default_detail = 'Forbidden.'
+    default_code = 'Forbidden'

@@ -17,6 +17,7 @@ class AbstractPostSelector(ABC):
     def get_post_by_id(self, post_id: int) -> QuerySet[Post]:
         pass
     
+    
 class PostSelector(AbstractPostSelector):
     def get_post_all() -> QuerySet[Post]:
         return Post.objects.all()
