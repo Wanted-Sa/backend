@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from post.services import PostService
 from post.serializers import PostListSerializer
+from post.selectors import PostSelector
 
 from config.common.decorator import (
     required_data,
@@ -22,9 +23,6 @@ class PostListAPI(APIView):
         try:
             post = PostService.create_post(rd['title'], rd['content'], request.user.id)
         
-        except ValueError as e:
-            raise ValidationException(e.errors()[0]['msg'])
-        
         except Exception as e:
             raise APIException(e)
         
@@ -32,3 +30,16 @@ class PostListAPI(APIView):
             'post': PostListSerializer(post).data,
         }
         return Response(data=context, status=status.HTTP_201_CREATED)
+    
+    def get(self, request):
+        try:
+            post = PostSelector.get_post_all()
+            
+        except Exception as e:
+            raise APIException(e)
+        
+        context = {
+            'post': PostListSerializer(post, many=True).data,
+        }
+        return Response(data=context, status=status.HTTP_200_OK)
+        
