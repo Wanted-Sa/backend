@@ -4,7 +4,7 @@ from pydantic import BaseModel, validator
 from account.models import Account
 
 
-class AccountCreateValidator(BaseModel):
+class AccountValidator(BaseModel):
     email: str 
     password: str 
     

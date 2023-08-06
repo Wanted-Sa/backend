@@ -4,10 +4,16 @@ from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.exceptions import APIException
-
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenViewBase
+from rest_framework_simplejwt.settings import api_settings
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 
 from account.services import (
     AccountService
+)
+from account.validators import (
+    AccountValidator
 )
 from account.serializers import (
     SignUpSerializer
@@ -17,7 +23,7 @@ from config.common.decorator import (
     optional_data,
 )
 
-class SingUpAPI(APIView):
+class SignUpAPI(APIView):
     
     @required_data('email', 'password')
     def post(self, request, rd):
@@ -34,4 +40,27 @@ class SingUpAPI(APIView):
             'account': SignUpSerializer(account).data,
         }
         return JsonResponse(data=context, status=status.HTTP_201_CREATED)
-            
+
+
+class SignInAPI(TokenViewBase):
+    _serializer_class = api_settings.TOKEN_OBTAIN_SERIALIZER
+    
+    @required_data('email', 'password')
+    def post(self, request, rd):
+        serializer = self.get_serializer(data=request.data, context={"request": request})
+        try:
+            AccountValidator(email=rd['email'], password=rd['password'])
+            serializer.is_valid(raise_exception=True)
+        
+        except ValueError as e:
+            raise APIException(e.errors()[0]['msg'])
+        
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
+        
+        context = {
+            'access_token': serializer.validated_data['access'],
+            'refresh_token': serializer.validated_data['refresh'],
+        }
+        return JsonResponse(data=context, status=status.HTTP_200_OK)
+        
