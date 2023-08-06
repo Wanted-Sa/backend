@@ -10,24 +10,11 @@ services:
     image: nginx:1.23.2
     ports:
       - "80:80"
-      - "443:443"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - django_media:/media/ 
       - django_static:/static/ 
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
     restart: always
-
-  certbot:
-    container_name : certbot
-    image : certbot/certbot:latest
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    restart: always
-    depends_on:
-      - nginx
   
   blue-backend:
     container_name: blue-backend

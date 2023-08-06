@@ -79,7 +79,7 @@ poetry run python manage.py runserver
 |특정 게시글 수정|PUT| api/v1/post/<int:post_id >|title, content|id, title, content, create_at, updated_at, account_id
 |특정 게시글 삭제|DELETE| api/v1/post/<int:post_id >/||
 ## AWS 아키텍처
-[django-wanted-task.shop](https://www.django-wanted-task.shop)
+[http://43.202.87.58/](http://43.202.87.58)
 ![AWS](./static/AWS.png)
 - Github actions를 활용하여 무중단 배포(Blue/Green Deploy)
 ## docker compose 실행

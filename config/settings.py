@@ -165,7 +165,7 @@ SIMPLE_JWT = {
     'JTI_CLAIM': 'jti',
 }
 
-CORS_ORIGIN_WHITELIST = ['https://43.202.87.58', 'https://www.django-wanted-task.shop', 'https://django-wanted-task.shop']
+CORS_ORIGIN_WHITELIST = ['http://43.202.87.58']
 
 
 # CSRF 허용 목록을 CORS와 동일하게 설정합니다.
