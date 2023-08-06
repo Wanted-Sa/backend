@@ -69,7 +69,19 @@ class PostDetailAPI(APIView):
     
     @required_data('title', 'content')
     def put(self, request, post_id, rd):
-        pass
+        try:
+            post = PostService.update_post(post_id, rd['title'], rd['content'], request.user.id)
+            
+        except NotFoundException as e:
+            raise NotFoundException(e)
+        
+        except Exception as e:
+            raise APIException(e)    
+        
+        context = {
+            'post': PostSerializer(post).data,
+        }
+        return Response(data=context, status=status.HTTP_200_OK)
     
     def delete(self, request, post_id):
         pass
