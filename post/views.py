@@ -12,8 +12,14 @@ from config.common.decorator import (
     required_data,
     optional_data,
 )
-from config.common.pagination import PaginationHandlerMixin, BasePagination
-from config.common.exceptions import NotFoundException
+from config.common.pagination import (
+    PaginationHandlerMixin, 
+    BasePagination,
+)
+from config.common.exceptions import (
+    NotFoundException, 
+    ForbiddenException,
+)
 
 
 class PostListAPI(PaginationHandlerMixin, APIView):
@@ -75,6 +81,9 @@ class PostDetailAPI(APIView):
         except NotFoundException as e:
             raise NotFoundException(e)
         
+        except ForbiddenException as e:
+            raise ForbiddenException(e)
+        
         except Exception as e:
             raise APIException(e)    
         
@@ -84,6 +93,17 @@ class PostDetailAPI(APIView):
         return Response(data=context, status=status.HTTP_200_OK)
     
     def delete(self, request, post_id):
-        pass
-    
+        try:
+            PostService.hard_delete_post(post_id, request.user.id)
+
+        except NotFoundException as e:
+            raise NotFoundException(e)
+        
+        except ForbiddenException as e:
+            raise ForbiddenException(e)
+        
+        except Exception as e:
+            raise APIException(e)    
+        
+        return Response(status=status.HTTP_204_NO_CONTENT)
     
